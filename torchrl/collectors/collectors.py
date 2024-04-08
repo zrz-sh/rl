@@ -265,16 +265,17 @@ class DataCollectorBase(IterableDataset, metaclass=abc.ABCMeta):
 
                 policy = TensorDictModule(policy, in_keys=in_keys, out_keys=out_keys)
             else:
-                raise TypeError(
-                    f"""Arguments to policy.forward are incompatible with entries in
-env.observation_spec (got incongruent signatures: fun signature is {set(sig.parameters)} vs specs {set(next_observation)}).
-If you want TorchRL to automatically wrap your policy with a TensorDictModule
-then the arguments to policy.forward must correspond one-to-one with entries
-in env.observation_spec that are prefixed with 'next_'. For more complex
-behaviour and more control you can consider writing your own TensorDictModule.
-Check the collector documentation to know more about accepted policies.
-"""
-                )
+                pass
+#                 raise TypeError(
+#                     f"""Arguments to policy.forward are incompatible with entries in
+# env.observation_spec (got incongruent signatures: fun signature is {set(sig.parameters)} vs specs {set(next_observation)}).
+# If you want TorchRL to automatically wrap your policy with a TensorDictModule
+# then the arguments to policy.forward must correspond one-to-one with entries
+# in env.observation_spec that are prefixed with 'next_'. For more complex
+# behaviour and more control you can consider writing your own TensorDictModule.
+# Check the collector documentation to know more about accepted policies.
+# """
+#                 )
         return policy
 
     def _get_policy_and_device(
