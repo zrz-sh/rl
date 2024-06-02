@@ -2534,6 +2534,35 @@ class EnvBase(nn.Module, metaclass=_EnvPostInit):
                 is_shared=False)
         """
         tensordict = self.step(tensordict)
+
+        # def manual_deepcopy(tensordict):
+        #     new_tensordict = TensorDict({}, tensordict.batch_size, device=self.device)
+        #     for key, value in tensordict.items():
+        #         if isinstance(value, TensorDictBase):
+        #             new_tensordict[key] = manual_deepcopy(value)
+        #         else:
+        #             new_tensordict[key] = value.clone() if hasattr(value, 'clone') else deepcopy(value)
+        #     return new_tensordict
+
+        # def compare_tensordicts(td1, td2):
+        #     if set(td1.keys()) != set(td2.keys()):
+        #         return False
+        #     for key in td1.keys():
+        #         if isinstance(td1[key], TensorDictBase):
+        #             if not compare_tensordicts(td1[key], td2[key]):
+        #                 return False
+        #         else:
+        #             if id(td1[key]) != id(td2[key]):
+        #                 print(key)
+        #                 return False
+        #     return True
+        
+        # tensordict1 = manual_deepcopy(tensordict)
+        # tensordict2 = deepcopy(tensordict)
+        # tensordict3 = tensordict.clone()
+
+        # import pdb; pdb.set_trace()
+        
         # done and truncated are in done_keys
         # We read if any key is done.
         tensordict_ = step_mdp(
@@ -2550,8 +2579,18 @@ class EnvBase(nn.Module, metaclass=_EnvPostInit):
             full_done_spec=self.output_spec["full_done_spec"],
             key="_reset",
         )
+        # if tensordict["next"]["done"].sum().item() > 0:
+        #     print(tensordict["next"]["done"].sum().item())
+        #     print(tensordict["next"]["stats"]["actor_0_wins"].sum().item())
+        #     print(tensordict["next"]["stats"]["actor_1_wins"].sum().item())
+        #     import pdb; pdb.set_trace()
         if any_done:
             tensordict_ = self.reset(tensordict_)
+        # if tensordict["next"]["done"].sum().item() > 0:
+        #     print(tensordict["next"]["done"].sum().item())
+        #     print(tensordict["next"]["stats"]["actor_0_wins"].sum().item())
+        #     print(tensordict["next"]["stats"]["actor_1_wins"].sum().item())
+        #     import pdb; pdb.set_trace()
         return tensordict, tensordict_
 
     def empty_cache(self):

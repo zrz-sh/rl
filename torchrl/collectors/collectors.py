@@ -1078,6 +1078,11 @@ class SyncDataCollector(DataCollectorBase):
                 else:
                     env_input = self._shuttle
                 env_output, env_next_output = self.env.step_and_maybe_reset(env_input)
+                # if env_output["next"]["done"].sum().item() > 0:
+                #     import pdb; pdb.set_trace()
+                #     print(env_output["next"]["done"].sum().item())
+                #     print(env_output["next"]["stats"]["actor_0_wins"].sum().item())
+                #     print(env_output["next"]["stats"]["actor_1_wins"].sum().item())
 
                 if self._shuttle is not env_output:
                     # ad-hoc update shuttle
